@@ -1,1 +1,1 @@
-# Seminaarityo-Yew
+# Todo sovellus - Rust Yew
