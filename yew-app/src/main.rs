@@ -19,6 +19,7 @@ struct App {
 
 enum Msg {
     Add(String),
+    Remove(usize)
 }
 
 impl Component for App {
@@ -59,6 +60,9 @@ impl Component for App {
                 };
                 self.todos.push(todo);
             }
+            Msg::Remove(i)=> {
+                self.todos.remove(i);
+            }
         }
         LocalStorage::set(KEY, &self.todos).expect("failed to set");
         true
@@ -72,8 +76,13 @@ impl App {
             if event.key() == "Enter" {
                 let input: HtmlInputElement = event.target_unchecked_into();
                 let value = input.value();
-                input.set_value("");
-                Some(Msg::Add(value))
+                if value != "" {
+                    input.set_value("");
+                    Some(Msg::Add(value))
+                }
+                else {
+                    None
+                }
             } else {
                 None
             }
@@ -93,6 +102,9 @@ impl App {
             <li>
                 <div>
                     <label>{&todo.text}</label>
+                    <button onclick={link.callback(move |_| Msg::Remove((i)))}>
+                        {"Remove"}
+                    </button>
                 </div>
             </li>
         }
