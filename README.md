@@ -3,10 +3,9 @@
 ###  Tavoitteet ja toteutus
 Seminaarityöni tavoitteena on luoda yksinkertainen web-sovellus käyttäen Rust ohjelmointikieltä ja Yew sovelluskehystä. Sovellus on "todo" eli tehtävienhallintasovellus, jossa käyttäjä pystyy listaamaan ja seuraamaan omia tehtäviään. Tähän raporttiin tulen kirjaamaan kokemuksiani sovelluksen kehittämisen erivaiheista. 
 
-Olin ennen projektia opiskellut Rust ohjelmointikieltä, mutta Yew oli minulle täysin uusi. Apuna sovelluksen kehittämiseen käytin Yew:n virallista dokumentaatiota sekä virallista Yew:n esimerkki sovellusta todomvc GitHubissa.
+Olin ennen projektia opiskellut Rust ohjelmointikieltä, mutta Yew oli minulle täysin uusi. Apuna sovelluksen kehittämiseen käytin Yew:n virallista dokumentaatiota sekä virallista Yew:n esimerkki sovellusta todomvc yew/examples repositoriosta GitHubissa.
 
-Pelkästään dokumentaation avulla oli vaikea päästä alkuun, joten esimerkistä oli paljon hyötyä. Dokumentaatiossakin eri aiheiden kohdissa suositeltiinkin katsomaan joitain virallisia Yew:n esimerkki sovelluksia.
-
+Pelkästään dokumentaation avulla oli vaikea päästä alkuun ja moni tutoriaaleista mitä löysin sisälsivät vanhaa tietoa. Tapoja toteuttaa sovellus löytyi myös monia eri tapoja. Yew:n virallista todo sovellusesimerkkiä on päivitetty Yew:n eri päivitysten tultua, joten päätin käyttää sitä pohjana omalle sovellukselleni. Dokumentaatiossakin eri aiheiden kohdissa suositeltiinkin katsomaan joitain virallisia Yew:n esimerkki sovelluksia.
 
 ### Lähteet
 Klabnik, S., Nichols, C., & Krycho, C. The Rust Programming Language. https://doc.rust-lang.org/book/. Luettu: 20.11.2025

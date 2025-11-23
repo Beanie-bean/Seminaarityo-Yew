@@ -10,16 +10,26 @@ struct TodoItem {
     text: String,
     #[prop_or(false)]
     complete: bool,
+    editing: bool,
 }
 
 struct App {
-    todos: Vec<TodoItem>,
+    state: State,
     focus_ref: NodeRef,
+}
+
+struct State {
+    todos: Vec<TodoItem>,
+    edit_value: String,
 }
 
 enum Msg {
     Add(String),
-    Remove(usize)
+    Remove(usize),
+    Edit(usize, String),
+    ToggleEdit(usize),
+    Toggle(usize),
+    Focus,
 }
 
 impl Component for App {
@@ -28,23 +38,33 @@ impl Component for App {
 
     fn create(_ctx: &Context<Self>) -> Self {
         let todos = LocalStorage::get(KEY).unwrap_or_else(|_| Vec::new());
+        let state = State {
+            todos: todos,
+            edit_value: String::new(),
+        };
         let focus_ref = NodeRef::default();
-        Self { todos, focus_ref }
+        Self { state, focus_ref }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
         <div>
-            <h2>{ "Todos" }</h2>
-                { self.view_input(ctx.link()) }
-            <ul>
-              { for self
-                .todos
-                .iter()
-                .enumerate()
-                .map(|(i, e)| self.view_todo((i, e), ctx.link()))
-                }
-            </ul>
+            <section class="app">
+                <header>
+                    <h2>{ "Todos" }</h2>
+                    { self.view_input(ctx.link()) }
+                </header>
+                    <ul class="list">
+                        { for self
+                            .state
+                            .todos
+                            .iter()
+                            .enumerate()
+                            .map(|(i, e)| self.view_todo((i, e), ctx.link()))
+                            }
+                    </ul>
+                
+            </section>
         </div>
         }
     }
@@ -57,18 +77,60 @@ impl Component for App {
                 let todo = TodoItem {
                     text: text.to_string(),
                     complete: false,
+                    editing: false,
                 };
-                self.todos.push(todo);
+                self.state.todos.push(todo);
             }
-            Msg::Remove(i)=> {
-                self.todos.remove(i);
+            Msg::Remove(i) => {
+                self.state.todos.remove(i);
+            }
+            Msg::Edit(i, edit_value) => {
+                self.state.complete_edit(i, edit_value.trim().to_string());
+                self.state.edit_value = "".to_string();
+            }
+            Msg::ToggleEdit(i) => {
+                let todo = self.state.todos.iter().nth(i).unwrap();
+                self.state.edit_value.clone_from(&todo.text);
+                self.state.toggle_edit(i);
+            }
+            Msg::Toggle(i) => {
+                self.state.toggle_completed(i);
+            }
+            Msg::Focus => {
+                if let Some(input) = self.focus_ref.cast::<HtmlInputElement>() {
+                    input.focus().unwrap();
+                }
             }
         }
-        LocalStorage::set(KEY, &self.todos).expect("failed to set");
+        LocalStorage::set(KEY, &self.state.todos).expect("failed to set");
         true
     }
 }
 
+impl State {
+    fn toggle_edit(&mut self, i: usize) {
+        let todo = self.todos.get_mut(i).unwrap();
+        todo.editing = !todo.editing;
+    }
+
+    fn toggle_completed(&mut self, i: usize) {
+        let todo = self.todos.get_mut(i).unwrap();
+        todo.complete = !todo.complete
+    }
+
+    fn complete_edit(&mut self, i: usize, value: String) {
+        if value.is_empty() {
+            self.remove(i);
+        } else {
+            let todo = self.todos.get_mut(i).unwrap();
+            todo.text = value;
+            todo.editing = !todo.editing;
+        }
+    }
+    fn remove(&mut self, i: usize) {
+        self.todos.remove(i);
+    }
+}
 
 impl App {
     fn view_input(&self, link: &Scope<Self>) -> Html {
@@ -79,34 +141,80 @@ impl App {
                 if value != "" {
                     input.set_value("");
                     Some(Msg::Add(value))
-                }
-                else {
+                } else {
                     None
                 }
             } else {
                 None
             }
         });
-        
+
         html! {
-            <div>
+            <div class="todoinput">
                 <input
+                    class="inputfield"
+                    placeholder="Add todo"
                     type="text"
                     {onkeypress}
                 />
             </div>
         }
     }
+
     fn view_todo(&self, (i, todo): (usize, &TodoItem), link: &Scope<Self>) -> Html {
+        let mut class = Classes::from("todo");
+        if todo.editing {
+            class.push("editing");
+        }
+        if todo.complete {
+            class.push("completed");
+        }
         html! {
-            <li>
-                <div>
-                    <label>{&todo.text}</label>
-                    <button onclick={link.callback(move |_| Msg::Remove((i)))}>
-                        {"Remove"}
-                    </button>
+            <div class="todolistbox">
+                <li {class}>
+                    <div class="todoline">
+                        <input
+                            class="checkbox"
+                            type="checkbox"
+                            checked={todo.complete}
+                            onclick={link.callback(move |_| Msg::Toggle(i))}
+                        />
+                        <label class="text" ondblclick={link.callback(move |_| Msg::ToggleEdit(i))}>{&todo.text}</label>
+                        <button class="remove" onclick={link.callback(move |_| Msg::Remove(i))}></button>
+                    </div>
+                    {self.view_todo_edit_input((i, todo), link)}
+                </li>
+            </div>
+        }
+    }
+
+    fn view_todo_edit_input(&self, (i, todo): (usize, &TodoItem), link: &Scope<Self>) -> Html {
+        let edit = move |input: HtmlInputElement| {
+            let value = input.value();
+            input.set_value("");
+            Msg::Edit(i, value)
+        };
+
+        // Next three lines of code are taken directly from https://github.com/yewstack/yew/blob/master/examples/todomvc/src/main.rs
+        let onkeypress = link.batch_callback(move |e: KeyboardEvent| {
+            (e.key() == "Enter").then(|| edit(e.target_unchecked_into()))
+        });
+
+        if todo.editing {
+            html! {
+                <div class="edit">
+                    <input
+                        class="editfield"
+                        type="text"
+                        ref={self.focus_ref.clone()}
+                        value={self.state.edit_value.clone()}
+                        onmouseover={link.callback(|_| Msg::Focus)}
+                        {onkeypress}
+                    />
                 </div>
-            </li>
+            }
+        } else {
+            html! { <input type="hidden" /> }
         }
     }
 }

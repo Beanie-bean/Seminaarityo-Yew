@@ -1,0 +1,100 @@
+body {
+    display: flex;
+    justify-content: center;
+    background: #ebebebfc;
+}
+
+.app {
+    margin-top: 40px;
+    width: 50vw;
+    border-style: solid;
+    border-radius: 1%;
+    border-color: black;
+    background: #B3CFD5;
+}
+
+.text {
+    font-family: "Lucida Console", "Courier New", monospace
+}
+
+.checkbox {
+    transform: scale(1.8);
+}
+
+.todoinput {
+    justify-self: center;
+    padding-bottom: 10px;
+}
+
+.inputfield {
+    border-radius: 5px;
+    border-style:solid;
+    padding-left: 8px;
+    width: 20vw;
+    height: 30px;
+    font-family: "Lucida Console", "Courier New", monospace
+}
+
+.edit {
+    padding-bottom: 5px;
+}
+
+.editfield {
+	padding: 4px;
+    border-radius: 5px;
+    border-style:solid;
+    font-family: "Lucida Console", "Courier New", monospace
+}
+
+.list {
+	list-style: none;
+}
+
+.list li.completed label{
+    color: #6c6c6c;
+    text-decoration: line-through;
+}
+
+.todolistbox {
+    width: 90%;
+}
+
+.todolist {
+    border-top: solid;
+    padding-top: 5px;
+}
+
+.todoline {
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    padding-bottom: 5px;
+}
+
+.remove {
+    display: flex;
+    align-items: center;
+    background: none;
+    border-radius: 50%;
+    height: 30px;
+    border-style: solid;
+    border-width: 1;
+    border-color: #4c6571;
+}
+
+.remove::before {
+    position: relative;
+    transform: scale(1.5);
+    content: "Ｘ";
+}
+
+.remove:hover {
+    color: #000000;
+    border-color: #000000;
+}
+
+h2 {
+    justify-self: center;
+    font-size: 40px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
