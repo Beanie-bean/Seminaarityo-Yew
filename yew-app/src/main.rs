@@ -29,7 +29,6 @@ enum Msg {
     Edit(usize, String),
     ToggleEdit(usize),
     Toggle(usize),
-    Focus,
 }
 
 impl Component for App {
@@ -47,6 +46,11 @@ impl Component for App {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let hidden_class = if self.state.todos.is_empty() {
+            "hidden"
+        } else {
+            ""
+        };
         html! {
         <div>
             <section class="app">
@@ -63,7 +67,7 @@ impl Component for App {
                             .map(|(i, e)| self.view_todo((i, e), ctx.link()))
                             }
                     </ul>
-                
+                    <p class={classes!("edithelp", hidden_class)}>{"Double click to edit"}</p>
             </section>
         </div>
         }
@@ -95,11 +99,6 @@ impl Component for App {
             }
             Msg::Toggle(i) => {
                 self.state.toggle_completed(i);
-            }
-            Msg::Focus => {
-                if let Some(input) = self.focus_ref.cast::<HtmlInputElement>() {
-                    input.focus().unwrap();
-                }
             }
         }
         LocalStorage::set(KEY, &self.state.todos).expect("failed to set");
@@ -148,7 +147,7 @@ impl App {
                 None
             }
         });
-
+    
         html! {
             <div class="todoinput">
                 <input
@@ -157,6 +156,7 @@ impl App {
                     type="text"
                     {onkeypress}
                 />
+                <p class="help">{"Press enter to submit"}</p>
             </div>
         }
     }
@@ -208,7 +208,6 @@ impl App {
                         type="text"
                         ref={self.focus_ref.clone()}
                         value={self.state.edit_value.clone()}
-                        onmouseover={link.callback(|_| Msg::Focus)}
                         {onkeypress}
                     />
                 </div>

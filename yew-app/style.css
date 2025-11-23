@@ -6,6 +6,7 @@ body {
 
 .app {
     margin-top: 40px;
+    padding-bottom: 20px;
     width: 50vw;
     border-style: solid;
     border-radius: 1%;
@@ -13,8 +14,15 @@ body {
     background: #B3CFD5;
 }
 
+h2 {
+    justify-self: center;
+    font-size: 40px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
 .text {
-    font-family: "Lucida Console", "Courier New", monospace
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: large;
 }
 
 .checkbox {
@@ -32,18 +40,31 @@ body {
     padding-left: 8px;
     width: 20vw;
     height: 30px;
-    font-family: "Lucida Console", "Courier New", monospace
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: medium;
 }
 
+.help {
+    display: flex;
+    justify-content: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: small;
+}
+
+
 .edit {
+    display: flex;
+    justify-content: center;
     padding-bottom: 5px;
 }
 
 .editfield {
 	padding: 4px;
+    margin-top: 5px;
     border-radius: 5px;
     border-style:solid;
-    font-family: "Lucida Console", "Courier New", monospace
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: medium;
 }
 
 .list {
@@ -56,19 +77,16 @@ body {
 }
 
 .todolistbox {
-    width: 90%;
-}
-
-.todolist {
-    border-top: solid;
-    padding-top: 5px;
+    width: 95%;
 }
 
 .todoline {
     display: flex;
     justify-content: space-between;
     align-items:center;
+    padding-top: 5px;
     padding-bottom: 5px;
+    border-bottom: 2px solid #000000;
 }
 
 .remove {
@@ -93,8 +111,15 @@ body {
     border-color: #000000;
 }
 
-h2 {
-    justify-self: center;
-    font-size: 40px;
+.edithelp {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    display: flex;
+    justify-content: center;
     font-family: "Lucida Console", "Courier New", monospace;
+    font-size: small;
+}
+
+.hidden {
+    display: none;
 }
