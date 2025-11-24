@@ -149,13 +149,15 @@ impl App {
         });
     
         html! {
-            <div class="todoinput">
-                <input
-                    class="inputfield"
-                    placeholder="Add todo"
-                    type="text"
-                    {onkeypress}
-                />
+            <div>
+                <div class="todoinput">
+                    <input
+                        class="inputfield"
+                        placeholder="Add todo"
+                        type="text"
+                        {onkeypress}
+                    />
+                </div>
                 <p class="help">{"Press enter to submit"}</p>
             </div>
         }
