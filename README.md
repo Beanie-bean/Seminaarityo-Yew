@@ -23,6 +23,8 @@ Sovelluksesta tuli lopulta toimiva ja tavoitteita vastaava. Opin uusia asioita R
 
 Jatkokehitys ideana voisi olla todo:n lisäämis ja muokkaamis tekstikenttien viereen "Add" nappien luonti. Tällä hetkellä lisääminen tapahtuu painamalla "Enter" nappia, mutta visuaalisen napin lisääminen tekisi sovelluksen käytöstä selkeämmän saavutettavamman. 
 
+Esittely video: https://video.haaga-helia.fi/media/t/0_5vcdqxte
+
 ### Lähteet
 Klabnik, S., Nichols, C., & Krycho, C. The Rust Programming Language. https://doc.rust-lang.org/book/. Luettu: 20.11.2025
 
